@@ -1,8 +1,7 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Form, Button, Alert, Col } from 'react-bootstrap';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-// Fetching a post by ID
 const fetchPostById = async (id) => {
     const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
     if (!response.ok) {
@@ -11,7 +10,6 @@ const fetchPostById = async (id) => {
     return response.json();
 };
 
-// Updating a post
 const putPost = async ({ id, post }) => {
     const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
         method: 'PUT',
@@ -31,7 +29,6 @@ const UpdatePost = () => {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [formData, setFormData] = useState({ title: '', body: '', userId: '', postId: '' });
 
-    // Mutation hook for updating a post
     const { mutate, isLoading, isError, error } = useMutation({
         mutationFn: putPost,
         onSuccess: (data) => {
@@ -56,17 +53,16 @@ const UpdatePost = () => {
             body,
             userId,
         };
-
-        // Call the mutate function with the postId and updated post data
         mutate({ id: postId, post: updatedPost });
     };
 
-    const handleChange = (event) => {
-        setFormData({
-            ...formData,
+    // Memoized handleChange function
+    const handleChange = useCallback((event) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
             [event.target.name]: event.target.value,
-        });
-    };
+        }));
+    }, []);
 
     return (
         <div>

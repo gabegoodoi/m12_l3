@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Button, Alert, Col } from 'react-bootstrap';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -17,7 +17,8 @@ const postPost = async (post) => {
     return response.json();
 };
 
-const AddPost = () => {
+// AddPost component, wrapped with React.memo to optimize re-renders
+const AddPost = React.memo(() => {
     const queryClient = useQueryClient();
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
@@ -27,7 +28,7 @@ const AddPost = () => {
             setShowSuccessAlert(true);
             console.log('Post added with ID:', data.id);
             queryClient.invalidateQueries(['posts']);
-            setTimeout(() => setShowSuccessAlert(false), 5000)
+            setTimeout(() => setShowSuccessAlert(false), 5000);
         },
     });
 
@@ -51,15 +52,15 @@ const AddPost = () => {
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="title">
                         <Form.Label>Title</Form.Label>
-                        <Form.Control type="text" name="title" placeholder="Enter title" required/>
+                        <Form.Control type="text" name="title" placeholder="Enter title" required />
                     </Form.Group>   
                     <Form.Group className="mb-3" controlId="userId">
                         <Form.Label>User ID</Form.Label>
-                        <Form.Control type="number" name="userId" placeholder="Enter User ID" min="1" step="any" required/>
+                        <Form.Control type="number" name="userId" placeholder="Enter User ID" min="1" step="any" required />
                     </Form.Group>  
                     <Form.Group className="mb-3" controlId="body">
                         <Form.Label>Body</Form.Label>
-                        <Form.Control as="textarea" name="body" rows={3} required/>
+                        <Form.Control as="textarea" name="body" rows={3} required />
                     </Form.Group>    
                     <Button variant="primary" type="submit" disabled={isLoading}>
                         {isLoading ? 'Posting...' : 'Submit Post'}
@@ -67,8 +68,7 @@ const AddPost = () => {
                 </Form>         
             </Col>
         </div>
-    )
-
-};
+    );
+});
 
 export default AddPost;
