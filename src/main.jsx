@@ -2,12 +2,11 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
+import SemanticAppLayout from './components/SemanticAppLayout.jsx';
 
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render( //render the app within the root element
+ReactDOM.createRoot(document.getElementById('root')).render( //render the app within the root element
     <React.StrictMode>
-      <App />
+      <SemanticAppLayout />
     </React.StrictMode>
 );
