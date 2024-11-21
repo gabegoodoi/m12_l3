@@ -1,15 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Button, Alert, Col } from 'react-bootstrap';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-
-// Fetch post details
-const fetchPostById = async (id) => {
-    const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
-    if (!response.ok) {
-        throw new Error('Failed to fetch post');
-    }
-    return response.json();
-};
 
 const deletePost = async ({ id }) => {
     const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
@@ -29,7 +20,6 @@ const DeletePost = () => {
     const [showSuccessAlert, setShowSuccessAlert] = useState(false);
     const [formData, setFormData] = useState({ postId: '' });
 
-    // Mutation hook for deleting a post
     const { mutate, isLoading, isError, error } = useMutation({
         mutationFn: deletePost,
         onSuccess: (data) => {
@@ -37,6 +27,9 @@ const DeletePost = () => {
             console.log('Post deleted with ID:', data.id);
             queryClient.invalidateQueries(['posts']);
             setTimeout(() => setShowSuccessAlert(false), 5000);
+        },
+        onError: (error) => {
+            console.error('Error deleting post:', error);
         },
     });
 
@@ -46,18 +39,9 @@ const DeletePost = () => {
         const { postId } = formData;
         if (!postId) {
             console.error('Please enter a postId');
-            return; 
+            return;
         }
-
-        // fetch the post details before deleting
-        fetchPostById(postId)
-            .then((post) => {
-                console.log(post);
-                mutate({ id: postId }); // Proceed with delete
-            })
-            .catch((error) => {
-                console.error('Failed to fetch post:', error);
-            });
+        mutate({ id: postId });
     };
 
     const handleChange = (event) => {
@@ -69,8 +53,9 @@ const DeletePost = () => {
 
     return (
         <div>
-            {isError && <Alert variant="danger">An error occurred: {error.message}</Alert>}
+            {isError && <Alert variant="danger">{error.message}</Alert>}
             {showSuccessAlert && <Alert variant="success">Post successfully deleted!</Alert>}
+            
             <Col md={{ span: 6, offset: 3 }}>
                 <Form onSubmit={handleSubmit}>
                     <Form.Group className="mb-3" controlId="postId">

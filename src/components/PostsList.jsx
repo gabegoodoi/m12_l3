@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import './i18n';
 import { useTranslation } from 'react-i18next';
+import React from 'react';
 
 const fetchPosts = async () => {
     const response = await fetch('https://jsonplaceholder.typicode.com/posts');
@@ -38,7 +39,7 @@ const PostsList = () => {
     };
 
     if (isLoading) return <Spinner animation="border" role="status"><span className="visually-hidden">{t('loading')}</span></Spinner>;
-    if (error) return <Alert variant="danger">{error.message}</Alert>;
+    if (error) return <Alert variant="danger" role="alert">{error.message}</Alert>;
 
     return (
         <div role="main" aria-labelledby="post-list-title">

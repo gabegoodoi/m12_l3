@@ -1,0 +1,9 @@
+// ensures proper transpilation of modern JavaScript and React JSX during testing.
+{
+    "presets": ["@babel/preset-env", "@babel/preset-react"],
+    "env": {
+      "test": {
+        "presets": ["@babel/preset-env", "@babel/preset-react"]
+      }
+    }
+  }

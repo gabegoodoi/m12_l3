@@ -1,10 +1,10 @@
+import React from 'react';
 import { Container, Navbar, Nav } from 'react-bootstrap';
 import {BrowserRouter as Router, Routes, Route }  from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import '../AppStyles.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 
 import './i18n';
 import PostsList from './PostsList';
@@ -13,11 +13,7 @@ import UpdatePost from './UpdatePost';
 import DeletePost from './DeletePost';
 import CommentForm from './CommentForm';
 
-
-
-
 const queryClient = new QueryClient();
-
 
 const SemanticAppLayout = () => {
     const { t, i18n } = useTranslation();
